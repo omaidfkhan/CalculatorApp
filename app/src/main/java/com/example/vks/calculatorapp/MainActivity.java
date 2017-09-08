@@ -8,18 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final List<String> ARITHMETIC_CHARACTERS = Arrays.asList("+", "-", "*", "/");
-
-    private String prevOperator = "";
 
     private Double valueOne = Double.NaN;
     private Double valueTwo = Double.NaN;
@@ -29,11 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private EditText editText;
 
-    private char CURRENT_ACTION;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -87,62 +80,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
         Button b = (Button) view;
         String s = b.getText().toString();
 
         /** DEBUGGING **/
         Toast.makeText(this, "Clicked on " + b.getText(), Toast.LENGTH_SHORT).show();
 
-        if (s.equalsIgnoreCase("C"))
-        {
+        if (s.equalsIgnoreCase("C")) {
             editText.setText("");
             textView.setText("");
-
-            valueOne = Double.NaN;
-            valueTwo = Double.NaN;
-            prevOperator = "";
         }
-        if (NumberUtils.isCreatable(s))
+
+        if (NumberUtils.isCreatable(s)) {
+            textView.setText(String.format("%s%s", textView.getText().toString(), b.getText()));
+        } else if (ARITHMETIC_CHARACTERS.contains(s) || s.equalsIgnoreCase("=")) // + , - , * , / OR =
         {
-            editText.setText((editText.getText().toString() + b.getText()), TextView.BufferType.EDITABLE);
-        }
-        else if (ARITHMETIC_CHARACTERS.contains(s) || s.equalsIgnoreCase("=")) // + , - , * , / OR =
-        {
-            try
-            {
-                // Parse the EditText to a Double.
-                if (StringUtils.isNotEmpty(editText.getText())) {
-                    valueTwo = Double.valueOf(editText.getText().toString());
-                }
-            } catch (Exception e)
-            {
-                Toast.makeText(this, "Unknown String encounter, cannot format: " + editText.getText().toString(), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Compute the expression and store into valueone
-            valueOne = compute(valueOne, valueTwo, prevOperator);
-
-            if (!valueOne.isNaN())
-            {
-                textView.setText(textView.getText() + editText.getText().toString() + s);
-            }
-
-            // Reset the ValueTwo
-            valueTwo = Double.NaN;
-
-            // Clear the Edit Text View
-            editText.setText("");
-
-            if (s.equalsIgnoreCase("="))
-            {
-                textView.setText(valueOne.toString());
-
-            }
-
-            prevOperator = s;
+            textView.setText(String.format("%s%s", textView.getText().toString(), b.getText()));
         }
 
     }
@@ -155,39 +109,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param valueTwo
      * @param operator
      */
-    private Double compute(Double valueOne, Double valueTwo, String operator)
-    {
+    private Double compute(Double valueOne, Double valueTwo, String operator) {
         // If ValueOne is NaN return
         // valueTwo as the answer.
-        if (valueOne.isNaN() || operator.isEmpty())
-        {
+        if (valueOne.isNaN() || operator.isEmpty()) {
             return valueTwo;
         }
 
-        try
-        {
-            if (operator.equalsIgnoreCase("+"))
-            {
+        try {
+            if (operator.equalsIgnoreCase("+")) {
                 return valueOne + valueTwo;
-            }
-            else if (operator.equalsIgnoreCase("-"))
-            {
+            } else if (operator.equalsIgnoreCase("-")) {
                 return valueOne - valueTwo;
-            }
-            else if (operator.equalsIgnoreCase("*"))
-            {
+            } else if (operator.equalsIgnoreCase("*")) {
                 return valueOne * valueTwo;
-            }
-            else if (operator.equalsIgnoreCase("/"))
-            {
+            } else if (operator.equalsIgnoreCase("/")) {
                 return valueOne / valueTwo;
-            }
-            else if (operator.equalsIgnoreCase("="))
-            {
+            } else if (operator.equalsIgnoreCase("=")) {
                 return valueOne;
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Toast.makeText(this, "Exception occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             textView.setText("");
         }
