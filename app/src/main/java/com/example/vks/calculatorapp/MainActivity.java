@@ -112,26 +112,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Double compute(Double valueOne, Double valueTwo, String operator) {
         // If ValueOne is NaN return
         // valueTwo as the answer.
-        if (valueOne.isNaN() || operator.isEmpty()) {
-            return valueTwo;
-        }
-
-        try {
-            if (operator.equalsIgnoreCase("+")) {
-                return valueOne + valueTwo;
-            } else if (operator.equalsIgnoreCase("-")) {
-                return valueOne - valueTwo;
-            } else if (operator.equalsIgnoreCase("*")) {
-                return valueOne * valueTwo;
-            } else if (operator.equalsIgnoreCase("/")) {
-                return valueOne / valueTwo;
-            } else if (operator.equalsIgnoreCase("=")) {
-                return valueOne;
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Exception occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            textView.setText("");
-        }
+//        if (valueOne.isNaN() || operator.isEmpty()) {
+//            return valueTwo;
+//        }
+//
+//        try {
+//            if (operator.equalsIgnoreCase("+")) {
+//                return valueOne + valueTwo;
+//            } else if (operator.equalsIgnoreCase("-")) {
+//                return valueOne - valueTwo;
+//            } else if (operator.equalsIgnoreCase("*")) {
+//                return valueOne * valueTwo;
+//            } else if (operator.equalsIgnoreCase("/")) {
+//                return valueOne / valueTwo;
+//            } else if (operator.equalsIgnoreCase("=")) {
+//                return valueOne;
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Exception occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            textView.setText("");
+//        }
 
         // If case reached this far then return NaN
         // acts as resetting the expression
