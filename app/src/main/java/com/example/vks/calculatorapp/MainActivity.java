@@ -7,7 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.vks.calculatorapp.databinding.ActivityMainBinding;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Arrays;
@@ -19,8 +20,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final List<String> ARITHMETIC_CHARACTERS = Arrays.asList("+", "-", "*", "/");
 
     private String prevOperator = "";
-
-    private ActivityMainBinding binding;
 
     private Double valueOne = Double.NaN;
     private Double valueTwo = Double.NaN;
@@ -93,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button b = (Button) view;
         String s = b.getText().toString();
 
+        /** DEBUGGING **/
+        Toast.makeText(this, "Clicked on " + b.getText(), Toast.LENGTH_SHORT).show();
+
         if (s.equalsIgnoreCase("C"))
         {
             editText.setText("");
@@ -102,17 +104,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             valueTwo = Double.NaN;
             prevOperator = "";
         }
-        if (NumberUtils.isNumber(s))
+        if (NumberUtils.isCreatable(s))
         {
             editText.setText((editText.getText().toString() + b.getText()), TextView.BufferType.EDITABLE);
-            Toast.makeText(this, "Clicked on " + b.getText(), Toast.LENGTH_SHORT).show();
         }
         else if (ARITHMETIC_CHARACTERS.contains(s) || s.equalsIgnoreCase("=")) // + , - , * , / OR =
         {
             try
             {
                 // Parse the EditText to a Double.
-                valueTwo = Double.valueOf(editText.getText().toString());
+                if (StringUtils.isNotEmpty(editText.getText())) {
+                    valueTwo = Double.valueOf(editText.getText().toString());
+                }
             } catch (Exception e)
             {
                 Toast.makeText(this, "Unknown String encounter, cannot format: " + editText.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             valueTwo = Double.NaN;
 
             // Clear the Edit Text View
-            editText.setText(valueOne.toString());
+            editText.setText("");
 
             if (s.equalsIgnoreCase("="))
             {
@@ -178,6 +181,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else if (operator.equalsIgnoreCase("/"))
             {
                 return valueOne / valueTwo;
+            }
+            else if (operator.equalsIgnoreCase("="))
+            {
+                return valueOne;
             }
         } catch (Exception e)
         {
